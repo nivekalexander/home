@@ -1,0 +1,18 @@
+BASE_HREF = /home-deploy/
+GITHUB_USER = nivekalexander
+GITHUB_REPO = https://github.com/$(GITHUB_USER)/home-deploy
+BUILD_VERSION := $(shell grep 'version:' pubspec.yaml | awk '{print $$2}')
+
+deploy:
+	flutter clean
+	flutter pub get
+	flutter build web --release --base-href $(BASE_HREF)
+	cd build/web && \
+	git init && \
+	git add . && \
+	git commit -m "Deploy Version $(BUILD_VERSION)" && \
+	git branch -M main && \
+	git remote add origin $(GITHUB_REPO) && \
+	git push -u -f origin main
+
+.PHONY: deploy
