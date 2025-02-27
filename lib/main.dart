@@ -1,22 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'core/bloc/auth_data_bloc.dart';
-import 'router/home_router.dart';
 
 void main() {
-  runApp(HomeApp());
+  final router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const HomePage(),
+      ),
+    ],
+  );
+
+  runApp(MyApp(router: router));
 }
 
-class HomeApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
+  final GoRouter router;
+
+  const MyApp({required this.router, Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(), // ✅ Se -instancia sin argumentos
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routerConfig: homeRouter,
-      ),
+    return MaterialApp.router(
+      routerConfig: router,
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Home")),
+      body: const Center(child: Text("Este es el microfrontend de Home")),
     );
   }
 }
